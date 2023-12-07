@@ -1,0 +1,70 @@
+{
+  "name": "run-command-on-file",
+  "displayName": "run-command-on-file",
+  "description": "Runs specified command on a file",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.84.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "run-command-on-file.runCommand",
+        "title": "Run command on current file"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Run command",
+        "properties": {
+          "run-command-on-file.command": {
+            "type": "object",
+            "default": {
+              "command": "echo \"Hello world\"",
+              "name": "echo"
+            }
+          },
+          "run-command-on-file.commands": {
+            "type": "array",
+            "default": [
+              {
+                "command": "echo \"Hello world\"",
+                "name": "echo"
+              },
+              {
+                "command": "echo \"Hello world 2\"",
+                "name": "echo2"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.84.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.2",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.8"
+  }
+}
