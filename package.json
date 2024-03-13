@@ -2,7 +2,7 @@
   "name": "run-command-on-file",
   "displayName": "Run command on file",
   "description": "Runs specified command on a file",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.84.0"
   },
@@ -24,12 +24,18 @@
       {
         "title": "Run command",
         "properties": {
-          "run-command-on-file.command": {
-            "type": "object",
-            "default": {
-              "command": "echo \"Hello world\"",
-              "name": "echo"
-            }
+          "run-command-on-file.commands": {
+            "type": "array",
+            "default": [
+              {
+                "command": "echo \"Hello world\"",
+                "name": "echo"
+              },
+              {
+                "command": "echo \"Hello world 2\"",
+                "name": "echo2"
+              }
+            ]
           }
         }
       }
@@ -39,11 +45,11 @@
     "vscode:prepublish": "npm run esbuild-base -- --minify",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
+    "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test",
-    "package": "pnpm vsce package --no-dependencies",
-    "publish": "pnpm vsce publish --no-dependencies",
+    "package": "npx @vscode/vsce package --no-dependencies",
+    "publish": "npx @vscode/vsce publish --no-dependencies",
     "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node"
   },
   "devDependencies": {

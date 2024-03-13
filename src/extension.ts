@@ -21,28 +21,28 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  const command = createCommand();
+  // const command = createCommand();
 
-  context.subscriptions.push(command);
-  context.subscriptions.push(createStatusBarItem());
-  //   vscode.workspace.onDidChangeConfiguration(event => {
-  // 	let affected = event.affectsConfiguration("riot.compiler");
-  // 	if (affected) {
-  // 		// rebuild cpp project settings
-  // 		setup();
-  // 	}
-  // })
+  for (const command of config.getCommands()) {
+    const item = createStatusBarItem(command);
+    context.subscriptions.push(createCommand(command.command));
+    if (item) {
+      context.subscriptions.push(item);
+    }
+  }
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
 
-function createCommand() {
-  const commandId = `${PACKAGE_NAME}.runCommand`;
-  return vscode.commands.registerCommand(commandId, onCommandHandler);
+function createCommand(command: string) {
+  const commandId = `${PACKAGE_NAME}.runCommand.${command}`;
+  return vscode.commands.registerCommand(commandId, () =>
+    onCommandHandler(command)
+  );
 }
 
-function onCommandHandler() {
+function onCommandHandler(command: string) {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     vscode.window.showInformationMessage("No active editor");
@@ -55,12 +55,7 @@ function onCommandHandler() {
     return;
   }
 
-  const command = config.getCommand();
-  if (!command) {
-    vscode.window.showInformationMessage("No command configured");
-    return;
-  }
-  const commandObject = new Command(command.command);
+  const commandObject = new Command(command);
   commandObject.execute().then((output) => {
     vscode.window.showInformationMessage(output);
   });

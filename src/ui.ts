@@ -1,13 +1,15 @@
 import * as vscode from "vscode";
-import { PACKAGE_NAME, config } from "./extension";
-export function createStatusBarItem() {
+import { ConfigType } from "./config";
+import { PACKAGE_NAME } from "./extension";
+export function createStatusBarItem(command:ConfigType) {
+  if (!command) return;
   const statusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
     1
   );
-
-  statusBarItem.text = config.getCommand()?.name || "Run command"; //todo: let user change name
-  statusBarItem.command = `${PACKAGE_NAME}.runCommand`;
+  
+  statusBarItem.text = command.name;
+  statusBarItem.command = `${PACKAGE_NAME}.runCommand.${command.command}`;
   statusBarItem.show();
   return statusBarItem;
 }

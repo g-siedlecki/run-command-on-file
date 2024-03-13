@@ -1,8 +1,7 @@
 import * as vscode from "vscode";
 import { PACKAGE_NAME } from "./extension";
-import { Command } from "./command";
 
-const CONFIG_KEY = "command";
+const CONFIG_KEY = "commands";
 export class Config {
   config: vscode.WorkspaceConfiguration;
   constructor() {
@@ -14,19 +13,19 @@ export class Config {
     return this.config;
   }
 
-  get(): ConfigType {
+  get(): ConfigType[] {
     this.getConfig();
-    const commandData = this.config.get(CONFIG_KEY) as ConfigType;
+    const commandData = this.config.get(CONFIG_KEY) as ConfigType[];
     return commandData;
   }
 
-  getCommand() {
-    const command = this.get();
-    return command;
+  getCommands() {
+    const commands = this.get();
+    return commands||[];
   }
 }
 
-type ConfigType = {
+export type ConfigType = {
   name: string;
   command: string;
 };
